@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solenis Pricing Project Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            padding: 40px;
+            height: calc(100vh - 80px);
+            background: white;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        .slide h2 {
+            color: #34495e;
+            font-size: 2em;
+            margin: 25px 0 20px 0;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+        }
+
+        .slide h3 {
+            color: #2980b9;
+            font-size: 1.5em;
+            margin: 20px 0 15px 0;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .slide ul, .slide ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .feature-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .process-step {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 25px;
+            margin: 10px;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .process-step::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #333;
+        }
+
+        .process-step:last-child::after {
+            display: none;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff7675, #e84393);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .demo-screenshot {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .role-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">25</span>
+        </div>
+
+        <!-- Slide 1: Title Slide -->
+        <div class="slide active">
+            <div style="text-align: center; margin-top: 100px;">
+                <h1 style="font-size: 3.5em; margin-bottom: 40px;">Solenis Pricing Project</h1>
+                <h2 style="border: none; font-size: 2.2em; color: #667eea;">Comprehensive Training Program</h2>
+                <div class="highlight-box" style="margin-top: 50px;">
+                    <h3>Transforming Pricing Operations</h3>
+                    <p style="font-size: 1.3em;">RevFlo • Price Guidance • DMP Integration</p>
+                </div>
+                <p style="margin-top: 40px; font-size: 1.2em; color: #666;">
+                    Institutional & Food & Beverage Markets | Diversey Brands
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Agenda -->
+        <div class="slide">
+            <h1>Training Agenda</h1>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Module 1: Project Overview</h4>
+                    <ul>
+                        <li>Objectives & Goals</li>
+                        <li>System Architecture</li>
+                        <li>Business Benefits</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Module 2: RevFlo System</h4>
+                    <ul>
+                        <li>Quote Creation</li>
+                        <li>Approval Workflows</li>
+                        <li>Agreement Management</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Module 3: Price Guidance</h4>
+                    <ul>
+                        <li>Price Index Methodology</li>
+                        <li>Peer Analysis</li>
+                        <li>Use Cases</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Module 4: DMP Platform</h4>
+                    <ul>
+                        <li>Mass Changes</li>
+                        <li>Agreement Creation</li>
+                        <li>Product Substitution</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Module 5: Analytics</h4>
+                    <ul>
+                        <li>Operational Reports</li>
+                        <li>Performance Dashboards</li>
+                        <li>Compliance Monitoring</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Module 6: Hands-On Practice</h4>
+                    <ul>
+                        <li>Live System Demo</li>
+                        <li>Common Scenarios</li>
+                        <li>Q&A Session</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Project Overview -->
+        <div class="slide">
+            <h1>Project Overview</h1>
+            <div class="highlight-box">
+                <h3>Mission Statement</h3>
+                <p>Develop a scalable and efficient solution for delivering meaningful reference prices to the sales team at the time of quoting while ensuring strategic pricing oversight.</p>
+            </div>
+            
+            <h2>Key Objectives</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🎯 Reference Prices</h4>
+                    <p>Provide meaningful reference prices for price guidance</p>
+                </div>
+                <div class="feature-card">
+                    <h4>👥 Segmentation</h4>
+                    <p>Segment customers and products into intuitive peer groups</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚙️ Control</h4>
+                    <p>Provide control over reference prices via parameter-driven rules</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Insights</h4>
+                    <p>Provide insight into price variability and compliance</p>
+                </div>
+            </div>
+
+            <h2>Project Scope</h2>
+            <ul>
+                <li><strong>Markets:</strong> Institutional and Food & Beverage</li>
+                <li><strong>Brands:</strong> Diversey</li>
+                <li><strong>Quote Types:</strong> Customer agreements for distributor, direct, and indirect customers</li>
+                <li><strong>Use Cases:</strong> General renewal, new requests, new customer agreements</li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: System Architecture -->
+        <div class="slide">
+            <h1>System Architecture</h1>
+            <div class="process-flow">
+                <div class="process-step">RevFlo (Salesforce)</div>
+                <div class="process-step">Vistex Cloud</div>
+                <div class="process-step">DMP Platform</div>
+                <div class="process-step">SAP ECC</div>
+            </div>
+
+            <h2>Component Overview</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Component</th>
+                    <th>Primary Function</th>
+                    <th>Key Features</th>
+                    <th>Users</th>
+                </tr>
+                <tr>
+                    <td><strong>RevFlo</strong></td>
+                    <td>Quote Creation & Management</td>
+                    <td>Price guidance, Approvals, Margin analysis</td>
+                    <td>Sales reps, Price analysts</td>
+                </tr>
+                <tr>
+                    <td><strong>Vistex Cloud</strong></td>
+                    <td>Price Guidance Engine</td>
+                    <td>Peer analysis, Price indices, Compliance</td>
+                    <td>Pricing directors, Analysts</td>
+                </tr>
+                <tr>
+                    <td><strong>DMP</strong></td>
+                    <td>Data Management</td>
+                    <td>Mass changes, Agreement creation</td>
+                    <td>Pricing hub, Product managers</td>
+                </tr>
+                <tr>
+                    <td><strong>SAP ECC</strong></td>
+                    <td>Master Data & Execution</td>
+                    <td>Agreements, Condition records, Billing</td>
+                    <td>System integration</td>
+                </tr>
+            </table>
+
+            <div class="success-box">
+                <strong>Integration Benefits:</strong> Seamless data flow, Real-time insights, Automated workflows, Centralized management
+            </div>
+        </div>
+
+        <!-- Slide 5: User Roles -->
+        <div class="slide">
+            <h1>User Roles & Responsibilities</h1>
+            
+            <h2>Primary User Groups</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4><span class="role-badge">Sales Representatives</span></h4>
+                    <p><strong>Primary System:</strong> RevFlo</p>
+                    <ul>
+                        <li>Create and manage customer quotes</li>
+                        <li>Review price guidance recommendations</li>
+                        <li>Submit quotes for approval</li>
+                        <li>Track agreement performance</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="role-badge">Price Analysts</span></h4>
+                    <p><strong>Primary System:</strong> RevFlo + Analytics</p>
+                    <ul>
+                        <li>Review margin analysis</li>
+                        <li>Approve quotes within authority</li>
+                        <li>Monitor pricing compliance</li>
+                        <li>Prepare pricing reports</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="role-badge">Pricing Directors</span></h4>
+                    <p><strong>Primary System:</strong> All Systems</p>
+                    <ul>
+                        <li>Strategic pricing oversight</li>
+                        <li>Policy parameter adjustments</li>
+                        <li>Final approval authority</li>
+                        <li>Market analysis review</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4><span class="role-badge">GSS Teams</span></h4>
+                    <p><strong>Primary System:</strong> Analytics + DMP</p>
+                    <ul>
+                        <li>Monthly data analysis</li>
+                        <li>Opportunity identification</li>
+                        <li>Mass price updates</li>
+                        <li>Performance monitoring</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Access Control</h3>
+                <p>Role-based permissions ensure users have appropriate access levels. Contact your system administrator for role assignments and permission requests.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: RevFlo Introduction -->
+        <div class="slide">
+            <h1>RevFlo System Introduction</h1>
+            
+            <div class="highlight-box">
+                <h3>What is RevFlo?</h3>
+                <p>RevFlo is a Salesforce-integrated application that enables sales teams to speed up sales cycles by negotiating and executing prices, quotations, and contracts with AI-driven price guidance and margin analysis.</p>
+            </div>
+
+            <h2>Key Capabilities</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Quote Management</h4>
+                    <ul>
+                        <li>Direct and indirect pricing</li>
+                        <li>Multi-level approvals</li>
+                        <li>Real-time price guidance</li>
+                        <li>Margin analysis integration</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Customer Management</h4>
+                    <ul>
+                        <li>Prospect to customer conversion</li>
+                        <li>Customer hierarchy support</li>
+                        <li>Agreement tracking</li>
+                        <li>Performance monitoring</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Product Management</h4>
+                    <ul>
+                        <li>Bundle configuration</li>
+                        <li>Excel upload capabilities</li>
+                        <li>Product substitution</li>
+                        <li>Pricing simulation</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Integration Features</h4>
+                    <ul>
+                        <li>Vistex price guidance</li>
+                        <li>SAP master data sync</li>
+                        <li>Automated workflows</li>
+                        <li>Real-time validations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Important:</strong> RevFlo requires Salesforce access and appropriate user licenses. Ensure you have the necessary permissions before beginning quote creation.
+            </div>
+        </div>
+
+        <!-- Slide 7: Quote Creation Process -->
+        <div class="slide">
+            <h1>Quote Creation Process</h1>
+            
+            <div class="process-flow">
+                <div class="process-step">Access RevFlo</div>
+                <div class="process-step">Create Quote</div>
+                <div class="process-step">Add Products</div>
+                <div class="process-step">Review Guidance</div>
+                <div class="process-step">Submit Approval</div>
+            </div>
+
+            <h2>Step-by-Step Guide</h2>
+            <h3>1. Quote Header Setup</h3>
+            <ul>
+                <li><strong>Customer Selection:</strong> Search and select existing customer or prospect</li>
+                <li><strong>Quote Type:</strong> Choose Direct, Indirect, or Distributor</li>
+                <li><strong>Business Sector:</strong> Select applicable sector (US only)</li>
+                <li><strong>Validity Period:</strong> Set quote valid from/to dates</li>
+            </ul>
+
+            <h3>2. Product Addition Methods</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Manual Selection</h4>
+                    <ul>
+                        <li>Search by material number</li>
+                        <li>Search by product name</li>
+                        <li>Browse by category</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Excel Upload</h4>
+                    <ul>
+                        <li>Download template</li>
+                        <li>Complete product details</li>
+                        <li>Upload completed file</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>3. Price Guidance Integration</h3>
+            <ul>
+                <li><strong>Target Price:</strong> Automatically populated recommendation</li>
+                <li><strong>Floor Price:</strong> Customer-specific minimum</li>
+                <li><strong>Ceiling Price:</strong> Maximum recommended price</li>
+                <li><strong>Deal Price:</strong> Your negotiated customer price</li>
+            </ul>
+        </div>
+
+        <!-- Slide 8: Approval Workflows -->
+        <div class="slide">
+            <h1>Approval Workflows</h1>
+            
+            <h2>Approval Matrix Logic</h2>
+            <div class="comparison-table">
+                <tr>
+                    <th>Price Position</th>
+                    <th>Approval Required</th>
+                    <th>Typical Approver</th>
+                    <th>Additional Checks</th>
+                </tr>
+                <tr>
+                    <td>Above Target Price</td>
+                    <td>None</td>
+                    <td>Auto-approved</td>
+                    <td>Compliance monitoring</td>
+                </tr>
+                <tr>
+                    <td>Between Floor & Target</td>
+                    <td>Manager Approval</td>
+                    <td>Area/District Manager</td>
+                    <td>Margin review</td>
+                </tr>
+                <tr>
+                    <td>At or Below Floor</td>
+                    <td>Director Approval</td>
+                    <td>Regional/VP level</td>
+                    <td>Strategic justification</td>
+                </tr>
+            </div>
+
+            <h2>Special Approval Scenarios</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>New Customers</h4>
+                    <p>Additional approval from Product Manager required for risk assessment</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Large Deals</h4>
+                    <p>Deals over $500K require extended approval chain and executive review</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Strategic Accounts</h4>
+                    <p>MFN customers require VP-level approval regardless of price position</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Multi-Year Agreements</h4>
+                    <p>Agreements over 2 years require additional stakeholder review</p>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Pro Tip:</strong> Review price guidance and peer reports before submitting for approval to strengthen your case and speed up the approval process.
+            </div>
+        </div>
+
+        <!-- Slide 9: Price Guidance Methodology -->
+        <div class="slide">
+            <h1>Price Guidance Methodology</h1>
+            
+            <div class="highlight-box">
+                <h3>Price Index Formula</h3>
+                <p style="font-size: 1.3em; text-align: center;">
+                    <strong>PI = Actual Price / (COGS + SSE)</strong>
+                </p>
+                <p>Where: PI = Price Index, COGS = Cost of Goods Sold, SSE = Sales & Selling Expenses</p>
+            </div>
+
+            <h2>Segmentation Attributes</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Customer Attributes</h4>
+                    <ul>
+                        <li>Business Type</li>
+                        <li>Customer Size ($)</li>
+                        <li>Order Frequency</li>
+                        <li>Geographic Location</li>
+                        <li>Sector Classification</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Product Attributes</h4>
+                    <ul>
+                        <li>Product Category</li>
+                        <li>Product Size ($)</li>
+                        <li>Major Product Groups</li>
+                        <li>Service Flag</li>
+                        <li>ECO Flag</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Market Attributes</h4>
+                    <ul>
+                        <li>Country</li>
+                        <li>Direct/Indirect Channel</li>
+                        <li>Division</li>
+                        <li>Order Characteristics</li>
+                        <li>Market Dynamics</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Why Price Indices Matter</h2>
+            <ul>
+                <li><strong>Normalization:</strong> Enables comparison across different products and volumes</li>
+                <li><strong>Benchmarking:</strong> Compare your deals against similar transactions</li>
+                <li><strong>Trend Analysis:</strong> Track pricing performance over time</li>
+                <li><strong>Opportunity Identification:</strong> Spot underperforming deals</li>
+            </ul>
+        </div>
+
+        <!-- Slide 10: Pricing Use Cases -->
+        <div class="slide">
+            <h1>Pricing Use Cases</h1>
+            
+            <h2>1. General Renewal</h2>
+            <div class="feature-card">
+                <h4>When to Use:</h4>
+                <p>Existing products for existing customers with purchase history</p>
+                <h4>Pricing Logic:</h4>
+                <ul>
+                    <li>Target price anchored to customer's previous price index</li>
+                    <li>Drift adjustment based on segment variability</li>
+                    <li>Low-performing customers get larger increments</li>
+                    <li>High-performing customers get smaller increases</li>
+                </ul>
+            </div>
+
+            <h2>2. Renewal with Additional Products</h2>
+            <div class="feature-card">
+                <h4>When to Use:</h4>
+                <p>New products for existing customers (no purchase history for these products)</p>
+                <h4>Pricing Logic:</h4>
+                <ul>
+                    <li>No self-reference price available</li>
+                    <li>Target based on segment-level recommendation</li>
+                    <li>Uses weighted average price index plus segment drift</li>
+                </ul>
+            </div>
+
+            <h2>3. New Customer Agreement</h2>
+            <div class="feature-card">
+                <h4>When to Use:</h4>
+                <p>New customers with no purchase history from Solenis</p>
+                <h4>Pricing Logic:</h4>
+                <ul>
+                    <li>Default to predefined attribute values</li>
+                    <li>Option to borrow attributes from sponsor customer</li>
+                    <li>Segment-based pricing recommendations</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>Important Decision Required:</strong> For new customers, determine who assigns sponsor customers and where this assignment occurs (RevFlo or Price Guidance system).
+            </div>
+        </div>
+
+        <!-- Slide 11: DMP Overview -->
+        <div class="slide">
+            <h1>DMP (Data Management Platform)</h1>
+            
+            <div class="highlight-box">
+                <h3>DMP Purpose</h3>
+                <p>The Data Management Platform handles backend agreement creation, mass price changes, and product substitution processes that support the RevFlo quoting system.</p>
+            </div>
+
+            <h2>Core DMP Functions</h2>
+            <div class="process-flow">
+                <div class="process-step">Agreement Creation</div>
+                <div class="process-step">Mass Changes</div>
+                <div class="process-step">Product Substitution</div>
+                <div class="process-step">Data Integration</div>
+            </div>
+
+            <h2>Automatic Agreement Generation</h2>
+            <p>When a Master Agreement is created from RevFlo, DMP automatically generates:</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Billback Agreements (ISR)</h4>
+                    <ul>
+                        <li>Indirect sales relationships</li>
+                        <li>End-customer eligibility</li>
+                        <li>Distributor terms</li>
+                        <li>Product applicability</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Rebate Agreements</h4>
+                    <ul>
+                        <li>Direct rebate terms</li>
+                        <li>Volume-based incentives</li>
+                        <li>Growth rebates</li>
+                        <li>Pre-bate arrangements</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Custom Contracts</h4>
+                    <ul>
+                        <li>Activity-Based Pricing (ABP)</li>
+                        <li>Project Engineering</li>
+                        <li>Equipment leasing</li>
+                        <li>Special arrangements</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>VK11 Condition Records</h4>
+                    <ul>
+                        <li>Direct pricing records</li>
+                        <li>Customer discounts</li>
+                        <li>Promotional conditions</li>
+                        <li>Special pricing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Mass Change Process -->
+        <div class="slide">
+            <h1>Mass Change Process</h1>
+            
+            <h2>When Mass Changes Are Needed</h2>
+            <ul>
+                <li><strong>Quarterly Product Reviews:</strong> Systematic pricing updates</li>
+                <li><strong>Cost Changes:</strong> COGS adjustments requiring price updates</li>
+                <li><strong>Market Repositioning:</strong> Strategic pricing initiatives</li>
+                <li><strong>Competitive Response:</strong> Market-driven adjustments</li>
+            </ul>
+
+            <h2>Mass Change Workflow</h2>
+            <div class="process-flow">
+                <div class="process-step">Opportunity Analysis</div>
+                <div class="process-step">Price Review Creation</div>
+                <div class="process-step">Impact Assessment</div>
+                <div class="process-step">Approval Process</div>
+                <div class="process-step">Implementation</div>
+            </div>
+
+            <h2>Price Review Process</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Initiation</h4>
+                    <ul>
+                        <li>GSS team identifies opportunities</li>
+                        <li>Commercial team recommendations</li>
+                        <li>Product manager inputs</li>
+                        <li>Market analysis results</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Analysis</h4>
+                    <ul>
+                        <li>Scope definition</li>
+                        <li>Impact calculations</li>
+                        <li>Risk assessment</li>
+                        <li>Timeline planning</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Implementation</h4>
+                    <ul>
+                        <li>Batch processing</li>
+                        <li>Automatic cascading</li>
+                        <li>Validation checks</li>
+                        <li>Communication plans</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Key Benefit:</strong> Mass changes automatically cascade to all related agreements and condition records, ensuring consistency across the entire pricing structure.
+            </div>
+        </div>
+
+        <!-- Slide 13: Analytics Overview -->
+        <div class="slide">
+            <h1>Operational Reports & Analytics</h1>
+            
+            <h2>Analytics Categories</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📊 Pricing Analytics</h4>
+                    <ul>
+                        <li>Gross-to-Net price waterfall</li>
+                        <li>Sales and margin trends</li>
+                        <li>Customer/product performance</li>
+                        <li>Waterfall comparisons</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Price Guidance</h4>
+                    <ul>
+                        <li>Observation reports</li>
+                        <li>Peer group analysis</li>
+                        <li>Opportunity analysis</li>
+                        <li>Compliance monitoring</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📋 Contract Analytics</h4>
+                    <ul>
+                        <li>Agreement overview</li>
+                        <li>Pipeline management</li>
+                        <li>Expiration tracking</li>
+                        <li>Agreement library</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>💰 Price Proposals</h4>
+                    <ul>
+                        <li>Open proposals</li>
+                        <li>Approval tracking</li>
+                        <li>Usage analytics</li>
+                        <li>Implementation status</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Key Performance Indicators</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Category</th>
+                    <th>Primary KPIs</th>
+                    <th>Frequency</th>
+                    <th>Primary Users</th>
+                </tr>
+                <tr>
+                    <td>Pricing Performance</td>
+                    <td>Margin %, Price realization, Compliance rate</td>
+                    <td>Monthly</td>
+                    <td>Pricing Directors</td>
+                </tr>
+                <tr>
+                    <td>Sales Analytics</td>
+                    <td>Revenue growth, Volume trends, Customer retention</td>
+                    <td>Monthly</td>
+                    <td>Sales Management</td>
+                </tr>
+                <tr>
+                    <td>Operational</td>
+                    <td>Quote approval time, Processing errors, Data quality</td>
+                    <td>Weekly</td>
+                    <td>Operations Teams</td>
+                </tr>
+                <tr>
+                    <td>Strategic</td>
+                    <td>Market position, Competitive analysis, Opportunity size</td>
+                    <td>Quarterly</td>
+                    <td>Executive Team</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Slide 14: Key Reports Deep Dive -->
+        <div class="slide">
+            <h1>Key Reports Deep Dive</h1>
+            
+            <h2>Gross-to-Net Price Waterfall</h2>
+            <div class="feature-card">
+                <h4>Purpose</h4>
+                <p>Track profitability components from list price to net margin</p>
+                <h4>Key Components</h4>
+                <ul>
+                    <li>List Price → Customer Price</li>
+                    <li>Direct Discounts → Invoice Price</li>
+                    <li>Rebates → Net Price</li>
+                    <li>COGS → Gross Margin</li>
+                </ul>
+                <h4>Use Cases</h4>
+                <ul>
+                    <li>Customer profitability analysis</li>
+                    <li>Product performance assessment</li>
+                    <li>Pricing strategy validation</li>
+                    <li>Leakage identification</li>
+                </ul>
+            </div>
+
+            <h2>Opportunity Analysis Report</h2>
+            <div class="feature-card">
+                <h4>Purpose</h4>
+                <p>Identify pricing improvement opportunities and quantify potential value</p>
+                <h4>Key Metrics</h4>
+                <ul>
+                    <li>Current Revenue vs. Target Revenue</li>
+                    <li>Opportunity Size by Segment</li>
+                    <li>Implementation Priority Ranking</li>
+                    <li>Expected Value Calculations</li>
+                </ul>
+                <h4>Filtering Options</h4>
+                <ul>
+                    <li>Agreements due for renewal</li>
+                    <li>Customer size classifications</li>
+                    <li>Product categories</li>
+                    <li>Geographic regions</li>
+                </ul>
+            </div>
+
+            <h2>Compliance Monitoring</h2>
+            <div class="feature-card">
+                <h4>Purpose</h4>
+                <p>Monitor adherence to price guidance recommendations</p>
+                <h4>Key Indicators</h4>
+                <ul>
+                    <li>Percentage of deals within guidance</li>
+                    <li>Average deviation from target prices</li>
+                    <li>Approval override rates</li>
+                    <li>Trend analysis over time</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 15: Hands-On Demo Setup -->
+        <div class="slide">
+            <h1>Hands-On Demo: Quote Creation</h1>
+            
+            <div class="highlight-box">
+                <h3>Demo Scenario</h3>
+                <p><strong>Customer:</strong> Metro Restaurants Inc. (Indirect via ABC Distributor)<br>
+                <strong>Products:</strong> Dishwashing chemicals and sanitizers<br>
+                <strong>Quote Type:</strong> Annual agreement renewal with additional products</p>
+            </div>
+
+            <h2>Demo Steps We'll Cover</h2>
+            <div class="process-flow">
+                <div class="process-step">Login & Navigation</div>
+                <div class="process-step">Quote Creation</div>
+                <div class="process-step">Product Addition</div>
+                <div class="process-step">Price Guidance Review</div>
+                <div class="process-step">Approval Submission</div>
+            </div>
+
+            <h2>What You'll Learn</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>System Navigation</h4>
+                    <ul>
+                        <li>RevFlo interface overview</li>
+                        <li>Menu structure</li>
+                        <li>Search functionality</li>
+                        <li>Key shortcuts</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Quote Management</h4>
+                    <ul>
+                        <li>Header information setup</li>
+                        <li>Customer/distributor selection</li>
+                        <li>Product search and addition</li>
+                        <li>Price entry and validation</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Price Guidance Usage</h4>
+                    <ul>
+                        <li>Target price interpretation</li>
+                        <li>Peer report analysis</li>
+                        <li>Compliance checking</li>
+                        <li>Adjustment strategies</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Approval Process</h4>
+                    <ul>
+                        <li>Margin analysis review</li>
+                        <li>Approval requirements</li>
+                        <li>Submission process</li>
+                        <li>Status tracking</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Demo Environment:</strong> We'll be using a training system with sample data. Do not use this for actual customer quotes.
+            </div>
+        </div>
+
+        <!-- Slide 16: Common Scenarios -->
+        <div class="slide">
+            <h1>Common Business Scenarios</h1>
+            
+            <h2>Scenario 1: Competitive Pricing Situation</h2>
+            <div class="feature-card">
+                <h4>Situation</h4>
+                <p>Customer received competing quote that's 15% below your target price</p>
+                <h4>RevFlo Actions</h4>
+                <ul>
+                    <li>Review peer report for similar competitive situations</li>
+                    <li>Check floor price to determine flexibility</li>
+                    <li>Document competitive intelligence in quote notes</li>
+                    <li>Submit for special approval with justification</li>
+                </ul>
+                <h4>Price Guidance Insights</h4>
+                <ul>
+                    <li>Compare competitor pricing patterns</li>
+                    <li>Review historical competitive responses</li>
+                    <li>Analyze win/loss rates at different price points</li>
+                </ul>
+            </div>
+
+            <h2>Scenario 2: New Product Introduction</h2>
+            <div class="feature-card">
+                <h4>Situation</h4>
+                <p>Introducing improved chemical formula to existing customer</p>
+                <h4>Process Steps</h4>
+                <ul>
+                    <li>Use "Renewal with Additional Products" pricing logic</li>
+                    <li>Review substitution ratios if replacing existing product</li>
+                    <li>Apply product manager guidance for NPI pricing</li>
+                    <li>Consider trial pricing or introductory discounts</li>
+                </ul>
+            </div>
+
+            <h2>Scenario 3: Multi-Site Customer Expansion</h2>
+            <div class="feature-card">
+                <h4>Situation</h4>
+                <p>Existing customer expanding to new locations with volume increases</p>
+                <h4>Considerations</h4>
+                <ul>
+                    <li>Volume-based pricing adjustments</li>
+                    <li>Geographic pricing variations</li>
+                    <li>Distributor network implications</li>
+                    <li>Logistics and delivery impact</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 17: Best Practices -->
+        <div class="slide">
+            <h1>Best Practices & Tips</h1>
+            
+            <h2>Quote Creation Best Practices</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>💡 Preparation</h4>
+                    <ul>
+                        <li>Gather customer requirements before starting</li>
+                        <li>Review existing agreements and performance</li>
+                        <li>Check for any pending price changes</li>
+                        <li>Verify customer master data accuracy</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Price Guidance Usage</h4>
+                    <ul>
+                        <li>Always review peer reports before pricing</li>
+                        <li>Understand the segment logic behind recommendations</li>
+                        <li>Document deviations with business justification</li>
+                        <li>Use compliance indicators as guidelines</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>✅ Quality Checks</h4>
+                    <ul>
+                        <li>Verify all required fields are completed</li>
+                        <li>Double-check quantities and units of measure</li>
+                        <li>Confirm distributor margins for indirect sales</li>
+                        <li>Review total quote value and margins</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🚀 Efficiency Tips</h4>
+                    <ul>
+                        <li>Use Excel templates for multi-product quotes</li>
+                        <li>Save frequently used product combinations</li>
+                        <li>Leverage quote cloning for similar customers</li>
+                        <li>Set up email notifications for approvals</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Common Pitfalls to Avoid</h2>
+            <div class="warning-box">
+                <ul>
+                    <li><strong>Ignoring Price Guidance:</strong> Always review recommendations even if you plan to deviate</li>
+                    <li><strong>Incomplete Documentation:</strong> Poor justification leads to approval delays</li>
+                    <li><strong>Wrong Quote Type:</strong> Selecting incorrect direct/indirect classification</li>
+                    <li><strong>Missing Approvals:</strong> Not accounting for all required approval levels</li>
+                    <li><strong>Data Quality Issues:</strong> Using outdated customer or product information</li>
+                </ul>
+            </div>
+
+            <h2>Performance Optimization</h2>
+            <div class="success-box">
+                <ul>
+                    <li><strong>Speed:</strong> Target quote creation in under 30 minutes for standard deals</li>
+                    <li><strong>Accuracy:</strong> Aim for first-time approval rate above 90%</li>
+                    <li><strong>Compliance:</strong> Stay within price guidance 80%+ of the time</li>
+                    <li><strong>Customer Service:</strong> Provide quotes within 24-48 hours of request</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 18: Troubleshooting -->
+        <div class="slide">
+            <h1>Troubleshooting Common Issues</h1>
+            
+            <h2>Technical Issues</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Problem</th>
+                    <th>Possible Cause</th>
+                    <th>Solution</th>
+                    <th>Escalation</th>
+                </tr>
+                <tr>
+                    <td>Cannot access RevFlo</td>
+                    <td>Permission/license issue</td>
+                    <td>Check Salesforce login, verify licenses</td>
+                    <td>IT Support</td>
+                </tr>
+                <tr>
+                    <td>Price guidance not loading</td>
+                    <td>Vistex Cloud connectivity</td>
+                    <td>Refresh page, check internet connection</td>
+                    <td>Technical Support</td>
+                </tr>
+                <tr>
+                    <td>Customer not found</td>
+                    <td>Master data sync issue</td>
+                    <td>Verify customer number, check SAP</td>
+                    <td>Master Data Team</td>
+                </tr>
+                <tr>
+                    <td>Submit to SAP failing</td>
+                    <td>Integration error</td>
+                    <td>Check error messages, retry</td>
+                    <td>Integration Team</td>
+                </tr>
+            </table>
+
+            <h2>Business Process Issues</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Approval Delays</h4>
+                    <ul>
+                        <li>Check approver availability</li>
+                        <li>Verify approval matrix rules</li>
+                        <li>Consider escalation options</li>
+                        <li>Review justification completeness</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>Price Guidance Issues</h4>
+                    <ul>
+                        <li>Verify segment has enough data</li>
+                        <li>Check for recent market changes</li>
+                        <li>Consult with pricing analyst</li>
+                        <li>Document special circumstances</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Getting Help</h2>
+            <div class="process-flow">
+                <div class="process-step">Self-Service (User Guide, FAQ)</div>
+                <div class="process-step">Peer Support (Super Users)</div>
+                <div class="process-step">Business Support (Pricing Team)</div>
+                <div class="process-step">Technical Support (IT/Vendor)</div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Support Contacts</h3>
+                <p><strong>Business Questions:</strong> Local Pricing Team<br>
+                <strong>Technical Issues:</strong> IT Help Desk<br>
+                <strong>Training:</strong> Learning & Development<br>
+                <strong>Process Issues:</strong> Business Analysts</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Change Management -->
+        <div class="slide">
+            <h1>Change Management & Adoption</h1>
+            
+            <h2>Transition from Current State</h2>
+            <div class="comparison-table">
+                <tr>
+                    <th>Current Process</th>
+                    <th>New Process (RevFlo)</th>
+                    <th>Key Improvements</th>
+                </tr>
+                <tr>
+                    <td>RAP Excel Files (NAM)</td>
+                    <td>RevFlo Quote Creation</td>
+                    <td>Real-time price guidance, automated workflows</td>
+                </tr>
+                <tr>
+                    <td>eProfiterol (Europe)</td>
+                    <td>RevFlo Integration</td>
+                    <td>Unified platform, better margin analysis</td>
+                </tr>
+                <tr>
+                    <td>PriceFx (Solenis)</td>
+                    <td>RevFlo + Price Guidance</td>
+                    <td>Enhanced analytics, peer comparisons</td>
+                </tr>
+                <tr>
+                    <td>Manual P&L Analysis</td>
+                    <td>Automated Margin Analysis</td>
+                    <td>Real-time calculations, consistency</td>
+                </tr>
+            </table>
+
+            <h2>Success Metrics</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📈 Business Metrics</h4>
+                    <ul>
+                        <li>Quote cycle time reduction: 50%</li>
+                        <li>Price guidance compliance: 80%+</li>
+                        <li>Margin improvement: 2-3%</li>
+                        <li>Quote accuracy: 95%+</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>👥 User Adoption</h4>
+                    <ul>
+                        <li>System utilization: 100% of sales team</li>
+                        <li>Training completion: 95%+ within 30 days</li>
+                        <li>User satisfaction: >4.0/5.0</li>
+                        <li>Support ticket reduction: 75%</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Change Readiness Actions</h2>
+            <div class="process-flow">
+                <div class="process-step">Training Completion</div>
+                <div class="process-step">Practice Sessions</div>
+                <div class="process-step">Go-Live Preparation</div>
+                <div class="process-step">Post-Launch Support</div>
+            </div>
+
+            <div class="success-box">
+                <strong>Remember:</strong> Change is a process, not an event. We're here to support you throughout the transition with training, documentation, and ongoing assistance.
+            </div>
+        </div>
+
+        <!-- Slide 20: Security & Compliance -->
+        <div class="slide">
+            <h1>Security & Compliance</h1>
+            
+            <h2>Data Security Measures</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔒 Access Controls</h4>
+                    <ul>
+                        <li>Role-based permissions</li>
+                        <li>Multi-factor authentication</li>
+                        <li>Regular access reviews</li>
+                        <li>Automated user provisioning</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🛡️ Data Protection</h4>
+                    <ul>
+                        <li>Encryption in transit and at rest</li>
+                        <li>Regular security audits</li>
+                        <li>Backup and recovery procedures</li>
+                        <li>Compliance monitoring</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📋 Audit Trail</h4>
+                    <ul>
+                        <li>Complete change history</li>
+                        <li>User action logging</li>
+                        <li>Approval documentation</li>
+                        <li>Compliance reporting</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Privacy Controls</h4>
+                    <ul>
+                        <li>Customer data protection</li>
+                        <li>GDPR compliance</li>
+                        <li>Data retention policies</li>
+                        <li>Right to be forgotten</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>User Responsibilities</h2>
+            <div class="warning-box">
+                <h3>Critical Security Requirements</h3>
+                <ul>
+                    <li><strong>Password Management:</strong> Use strong, unique passwords and enable MFA</li>
+                    <li><strong>Data Handling:</strong> Never share customer pricing data outside authorized systems</li>
+                    <li><strong>Access Management:</strong> Log out when not in use, especially on shared computers</li>
+                    <li><strong>Incident Reporting:</strong> Report suspicious activity immediately to IT Security</li>
+                    <li><strong>Training Compliance:</strong> Complete annual security awareness training</li>
+                </ul>
+            </div>
+
+            <h2>Regulatory Compliance</h2>
+            <ul>
+                <li><strong>SOX Compliance:</strong> Financial reporting accuracy and controls</li>
+                <li><strong>GDPR:</strong> European customer data protection requirements</li>
+                <li><strong>Industry Standards:</strong> Chemical industry specific regulations</li>
+                <li><strong>Internal Policies:</strong> Solenis data governance and ethics policies</li>
+            </ul>
+        </div>
+
+        <!-- Slide 21: Performance Monitoring -->
+        <div class="slide">
+            <h1>Performance Monitoring & KPIs</h1>
+            
+            <h2>System Performance Metrics</h2>
+            <table class="comparison-table">
+                <tr>
+                    <th>Metric</th>
+                    <th>Target</th>
+                    <th>Measurement</th>
+                    <th>Frequency</th>
+                </tr>
+                <tr>
+                    <td>Quote Creation Time</td>
+                    <td>< 30 minutes</td>
+                    <td>Average time from start to submission</td>
+                    <td>Weekly</td>
+                </tr>
+                <tr>
+                    <td>Price Guidance Response</td>
+                    <td>< 5 seconds</td>
+                    <td>API response time</td>
+                    <td>Real-time</td>
+                </tr>
+                <tr>
+                    <td>System Availability</td>
+                    <td>99.9%</td>
+                    <td>Uptime monitoring</td>
+                    <td>Continuous</td>
+                </tr>
+                <tr>
+                    <td>Data Accuracy</td>
+                    <td>99.5%</td>
+                    <td>Data validation checks</td>
+                    <td>Daily</td>
+                </tr>
+            </table>
+
+            <h2>Business Performance Indicators</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>💰 Financial KPIs</h4>
+                    <ul>
+                        <li>Average deal margin improvement</li>
+                        <li>Price guidance compliance rate</li>
+                        <li>Revenue per quote</li>
+                        <li>Deal win rate</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ Efficiency KPIs</h4>
+                    <ul>
+                        <li>Quote cycle time reduction</li>
+                        <li>Approval time reduction</li>
+                        <li>Quote accuracy rate</li>
+                        <li>Rework percentage</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>👥 User KPIs</h4>
+                    <ul>
+                        <li>System adoption rate</li>
+                        <li>User satisfaction scores</li>
+                        <li>Training completion rate</li>
+                        <li>Support ticket volume</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Quality KPIs</h4>
+                    <ul>
+                        <li>Data quality score</li>
+                        <li>Process compliance rate</li>
+                        <li>Error rate reduction</li>
+                        <li>Customer satisfaction</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Continuous Improvement</h2>
+            <div class="highlight-box">
+                <h3>Monthly Business Reviews</h3>
+                <p>Regular review meetings to assess performance, identify issues, and implement improvements based on user feedback and system analytics.</p>
+            </div>
+        </div>
+
+        <!-- Slide 22: Future Enhancements -->
+        <div class="slide">
+            <h1>Future Enhancements & Roadmap</h1>
+            
+            <h2>Phase 2 Enhancements (Next 6-12 Months)</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🤖 AI/ML Improvements</h4>
+                    <ul>
+                        <li>Enhanced price prediction algorithms</li>
+                        <li>Automated competitive intelligence</li>
+                        <li>Customer behavior analytics</li>
+                        <li>Dynamic pricing optimization</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 Geographic Expansion</h4>
+                    <ul>
+                        <li>Additional countries/regions</li>
+                        <li>Local currency support</li>
+                        <li>Regional pricing models</li>
+                        <li>Multi-language interface</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Mobile Capabilities</h4>
+                    <ul>
+                        <li>Mobile quote creation</li>
+                        <li>Approval notifications</li>
+                        <li>Customer meeting support</li>
+                        <li>Offline functionality</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🔗 Integration Extensions</h4>
+                    <ul>
+                        <li>CRM data enrichment</li>
+                        <li>ERP system expansion</li>
+                        <li>Third-party data sources</li>
+                        <li>API ecosystem development</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Long-term Vision (12+ Months)</h2>
+            <ul>
+                <li><strong>Predictive Analytics:</strong> Forecast customer needs and market trends</li>
+                <li><strong>Real-time Optimization:</strong> Dynamic pricing based on market conditions</li>
+                <li><strong>Customer Self-Service:</strong> Portal for customers to request quotes</li>
+                <li><strong>Advanced Segmentation:</strong> Machine learning-driven customer clustering</li>
+                <li><strong>Market Intelligence:</strong> Competitive landscape monitoring</li>
+            </ul>
+
+            <h2>Innovation Opportunities</h2>
+            <div class="success-box">
+                <strong>Your Input Matters:</strong> We encourage feedback and suggestions for system improvements. Regular user surveys and feedback sessions help shape our development priorities.
+            </div>
+        </div>
+
+        <!-- Slide 23: Q&A Preparation -->
+        <div class="slide">
+            <h1>Q&A Session Preparation</h1>
+            
+            <h2>Frequently Asked Questions</h2>
+            <div class="feature-card">
+                <h4>Q: What happens to my existing quotes in the old system?</h4>
+                <p><strong>A:</strong> Existing quotes will be migrated during the transition period. Active agreements will be converted to the new system format with full history preservation.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Q: How accurate is the price guidance?</h4>
+                <p><strong>A:</strong> Price guidance is based on historical data and statistical models. Accuracy improves over time as more data is collected. Typical accuracy rates are 85-90% for established segments.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Q: Can I override price guidance recommendations?</h4>
+                <p><strong>A:</strong> Yes, with proper justification and approval. The system is designed to guide, not restrict. Business judgment remains critical for complex situations.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Q: What if my customer isn't in the system?</h4>
+                <p><strong>A:</strong> You can create quotes for prospects. Once the customer is approved, a SAP customer number will be created and the quote can be finalized.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Q: How long does the approval process take?</h4>
+                <p><strong>A:</strong> Typical approval times range from 4-24 hours depending on complexity and approval levels required. Emergency processes are available for urgent situations.</p>
+            </div>
+
+            <h2>Technical Questions</h2>
+            <div class="feature-card">
+                <h4>Q: What browsers are supported?</h4>
+                <p><strong>A:</strong> Chrome, Firefox, Safari, and Edge (latest versions). Internet Explorer is not supported.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Q: Can I work offline?</h4>
+                <p><strong>A:</strong> Limited offline capability is available for viewing existing data. Quote creation and price guidance require internet connectivity.</p>
+            </div>
+
+            <h2>Business Process Questions</h2>
+            <div class="feature-card">
+                <h4>Q: How do I handle special pricing situations?</h4>
+                <p><strong>A:</strong> Document special circumstances in quote notes and work with your pricing analyst for guidance. Emergency approval processes are available.</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: Next Steps -->
+        <div class="slide">
+            <h1>Next Steps & Action Items</h1>
+            
+            <h2>Immediate Actions (Next 7 Days)</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>✅ System Access</h4>
+                    <ul>
+                        <li>Verify RevFlo access in Salesforce</li>
+                        <li>Complete initial system login</li>
+                        <li>Test basic navigation</li>
+                        <li>Report any access issues</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>📚 Training Completion</h4>
+                    <ul>
+                        <li>Review user guide materials</li>
+                        <li>Complete online training modules</li>
+                        <li>Practice with sample data</li>
+                        <li>Schedule follow-up sessions if needed</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Preparation</h4>
+                    <ul>
+                        <li>Identify first quotes to create</li>
+                        <li>Gather customer requirements</li>
+                        <li>Review existing agreements</li>
+                        <li>Connect with local super users</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h4>🤝 Team Coordination</h4>
+                    <ul>
+                        <li>Coordinate with approval authorities</li>
+                        <li>Update customer communication</li>
+                        <li>Plan transition timeline</li>
+                        <li>Schedule team meetings</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>30-Day Goals</h2>
+            <ul>
+                <li><strong>System Proficiency:</strong> Complete at least 5 practice quotes</li>
+                <li><strong>Process Understanding:</strong> Navigate approval workflows successfully</li>
+                <li><strong>Price Guidance Usage:</strong> Effectively use peer reports and recommendations</li>
+                <li><strong>Customer Transition:</strong> Begin using RevFlo for new customer quotes</li>
+            </ul>
+
+            <h2>90-Day Objectives</h2>
+            <ul>
+                <li><strong>Full Adoption:</strong> Use RevFlo for all new quotes and renewals</li>
+                <li><strong>Performance Metrics:</strong> Meet target cycle times and accuracy rates</li>
+                <li><strong>Advanced Features:</strong> Utilize analytics and reporting capabilities</li>
+                <li><strong>Continuous Improvement:</strong> Provide feedback for system enhancements</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h3>Support Resources Available</h3>
+                <ul>
+                    <li><strong>User Guide:</strong> Comprehensive documentation and procedures</li>
+                    <li><strong>Training Videos:</strong> Step-by-step tutorials for key processes</li>
+                    <li><strong>Super Users:</strong> Local experts for peer support</li>
+                    <li><strong>Help Desk:</strong> Technical support for system issues</li>
+                    <li><strong>Business Support:</strong> Pricing team for process questions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 25: Thank You -->
+        <div class="slide">
+            <div style="text-align: center; margin-top: 150px;">
+                <h1 style="font-size: 3em; margin-bottom: 40px;">Thank You!</h1>
+                <div class="highlight-box">
+                    <h2>Questions & Discussion</h2>
+                    <p style="font-size: 1.3em;">Let's make this transformation successful together</p>
+                </div>
+                
+                <div style="margin-top: 60px;">
+                    <h3>Key Contacts for Ongoing Support</h3>
+                    <div class="feature-grid" style="margin-top: 30px;">
+                        <div class="feature-card">
+                            <h4>📧 Training Support</h4>
+                            <p>training@solenis.com</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔧 Technical Issues</h4>
+                            <p>ithelp@solenis.com</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💼 Business Questions</h4>
+                            <p>pricing@solenis.com</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📚 Documentation</h4>
+                            <p>RevFlo User Portal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success-box" style="margin-top: 40px;">
+                    <h3>Remember: We're Here to Help!</h3>
+                    <p>This is a journey, not a destination. Your success is our success, and we're committed to supporting you every step of the way.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">Previous</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                changeSlide(-1);
+            } else if (event.key === 'Home') {
+                event.preventDefault();
+                showSlide(0);
+            } else if (event.key === 'End') {
+                event.preventDefault();
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+
+        // Auto-advance slides (optional - uncomment to enable)
+        /*
+        let autoAdvance = setInterval(function() {
+            if (currentSlide < totalSlides - 1) {
+                changeSlide(1);
+            } else {
+                clearInterval(autoAdvance);
+            }
+        }, 30000); // 30 seconds per slide
+        */
+
+        // Pause auto-advance on user interaction
+        document.addEventListener('click', function() {
+            // clearInterval(autoAdvance);
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swiped left - next slide
+                    changeSlide(1);
+                } else {
+                    // Swiped right - previous slide
+                    changeSlide(-1);
+                }
+            }
+        }
+
+        // Print-friendly styles
+        window.addEventListener('beforeprint', function() {
+            // Show all slides for printing
+            slides.forEach(slide => {
+                slide.style.display = 'block';
+                slide.style.pageBreakAfter = 'always';
+            });
+        });
+
+        window.addEventListener('afterprint', function() {
+            // Restore normal display
+            slides.forEach((slide, index) => {
+                slide.style.display = index === currentSlide ? 'block' : 'none';
+                slide.style.pageBreakAfter = 'auto';
+            });
+        });
+
+        // Fullscreen toggle (F11 alternative)
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Add fullscreen toggle on F key press
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'f' || event.key === 'F') {
+                event.preventDefault();
+                toggleFullscreen();
+            }
+        });
+
+        // Progress indicator
+        function updateProgress() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            // You can add a progress bar here if needed
+        }
+
+        // Speaker notes (hidden by default, can be shown in presenter mode)
+        const speakerNotes = {
+            0: "Welcome everyone to the Solenis Pricing Project training. This comprehensive program will transform how we handle pricing operations.",
+            1: "Today's agenda covers six key modules, from project overview to hands-on practice. We'll spend about 3-4 hours total.",
+            2: "Our mission is clear: provide meaningful reference prices while ensuring strategic oversight. This affects Institutional and F&B markets.",
+            3: "The architecture integrates RevFlo, Vistex Cloud, and DMP seamlessly. Each component has specific roles and users.",
+            4: "Understanding user roles is critical. Sales reps focus on RevFlo, while pricing directors have access to all systems.",
+            // Add notes for other slides as needed
+        };
+
+        function showSpeakerNotes() {
+            const note = speakerNotes[currentSlide];
+            if (note) {
+                console.log(`Speaker Note for Slide ${currentSlide + 1}: ${note}`);
+            }
+        }
+
+        // Call speaker notes on slide change (for presenter mode)
+        // showSpeakerNotes();
+    </script>
+</body>
+</html>
